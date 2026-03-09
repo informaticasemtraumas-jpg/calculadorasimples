@@ -77,6 +77,12 @@ class CalculadoraOvos {
             this.calcular();
         });
         
+        // Botão baixar PDF
+        const btnBaixarPDF = document.getElementById('btnBaixarPDF');
+        if (btnBaixarPDF) {
+            btnBaixarPDF.addEventListener('click', () => this.gerarPDF());
+        }
+        
         // Botão simular outro
         this.btnSimularOutro.addEventListener('click', () => {
             this.blocoResultado.style.display = 'none';
@@ -354,3 +360,104 @@ class CalculadoraOvos {
 document.addEventListener('DOMContentLoaded', () => {
     new CalculadoraOvos();
 });
+
+    gerarPDF() {
+        // Obter dados do formulário
+        const nomeProduto = this.nomeProduto.value || 'Ovo de Páscoa';
+        const pesoCasca = this.pesoCasca.value;
+        const pesoRecheio = this.pesoRecheio.value;
+        const custoCasca = this.custoCasca.value;
+        const custoRecheio = this.custoRecheio.value;
+        const custoEmbalagem = this.custoEmbalagem.value;
+        const tempoProducao = this.tempoProducao.value;
+        const valorHora = this.valorHora.value;
+        const margemLucro = this.margemLucro.value;
+        
+        // Criar conteúdo do PDF
+        const pdfContent = `
+            <div style="background: white; padding: 30px; font-family: 'Inter', sans-serif;">
+                <div style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 3px solid #E8B4B8;">
+                    <h1 style="color: #6B3E26; font-size: 1.8rem; margin: 0 0 10px 0; font-family: 'Poppins', sans-serif;">🍫 Relatório de Preço - Ovo de Páscoa</h1>
+                    <p style="color: #666; font-size: 0.95rem; margin: 5px 0;">Calculadora de Preços para Confeiteiras</p>
+                </div>
+                
+                <div style="background: #F4E6D9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <p style="margin: 8px 0;"><strong style="color: #6B3E26;">Produto:</strong> ${nomeProduto}</p>
+                    <p style="margin: 8px 0;"><strong style="color: #6B3E26;">Data:</strong> ${new Date().toLocaleDateString('pt-BR')}</p>
+                </div>
+                
+                <h3 style="color: #6B3E26; margin-top: 20px; margin-bottom: 10px; font-family: 'Poppins', sans-serif;">📊 Dados do Cálculo</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.9rem;">
+                    <tr style="background: #F4E6D9;">
+                        <td style="padding: 8px; border: 1px solid #E5D5C8;"><strong>Peso da Casca</strong></td>
+                        <td style="padding: 8px; border: 1px solid #E5D5C8;">${pesoCasca}g</td>
+                        <td style="padding: 8px; border: 1px solid #E5D5C8;"><strong>Custo/kg</strong></td>
+                        <td style="padding: 8px; border: 1px solid #E5D5C8;">R$ ${parseFloat(custoCasca).toFixed(2)}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #E5D5C8;"><strong>Peso do Recheio</strong></td>
+                        <td style="padding: 8px; border: 1px solid #E5D5C8;">${pesoRecheio}g</td>
+                        <td style="padding: 8px; border: 1px solid #E5D5C8;"><strong>Custo/kg</strong></td>
+                        <td style="padding: 8px; border: 1px solid #E5D5C8;">R$ ${parseFloat(custoRecheio).toFixed(2)}</td>
+                    </tr>
+                    <tr style="background: #F4E6D9;">
+                        <td style="padding: 8px; border: 1px solid #E5D5C8;"><strong>Tempo de Produção</strong></td>
+                        <td style="padding: 8px; border: 1px solid #E5D5C8;">${tempoProducao} min</td>
+                        <td style="padding: 8px; border: 1px solid #E5D5C8;"><strong>Valor/hora</strong></td>
+                        <td style="padding: 8px; border: 1px solid #E5D5C8;">R$ ${parseFloat(valorHora).toFixed(2)}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #E5D5C8;"><strong>Custo Embalagem</strong></td>
+                        <td style="padding: 8px; border: 1px solid #E5D5C8;">R$ ${parseFloat(custoEmbalagem).toFixed(2)}</td>
+                        <td style="padding: 8px; border: 1px solid #E5D5C8;"><strong>Margem Desejada</strong></td>
+                        <td style="padding: 8px; border: 1px solid #E5D5C8;">${margemLucro}%</td>
+                    </tr>
+                </table>
+                
+                <h3 style="color: #6B3E26; margin-top: 20px; margin-bottom: 10px; font-family: 'Poppins', sans-serif;">✨ Resultados Finais</h3>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+                    <tr style="background: #FFF8F2; border-bottom: 2px solid #E8B4B8;">
+                        <td style="padding: 12px; border: 1px solid #E5D5C8;"><strong>Custo Real Total</strong></td>
+                        <td style="padding: 12px; border: 1px solid #E5D5C8; text-align: right; color: #C97B63; font-weight: bold;">${this.custoRealTotal.textContent}</td>
+                    </tr>
+                    <tr style="background: #FFF8F2;">
+                        <td style="padding: 12px; border: 1px solid #E5D5C8;"><strong>Preço Mínimo</strong></td>
+                        <td style="padding: 12px; border: 1px solid #E5D5C8; text-align: right;">${this.precoMinimo.textContent}</td>
+                    </tr>
+                    <tr style="background: #FFF8F2;">
+                        <td style="padding: 12px; border: 1px solid #E5D5C8;"><strong>Preço Sugerido</strong></td>
+                        <td style="padding: 12px; border: 1px solid #E5D5C8; text-align: right; color: #6AA84F; font-weight: bold; font-size: 1.1rem;">${this.precoSugerido.textContent}</td>
+                    </tr>
+                    <tr style="background: #FFF8F2;">
+                        <td style="padding: 12px; border: 1px solid #E5D5C8;"><strong>Lucro por Unidade</strong></td>
+                        <td style="padding: 12px; border: 1px solid #E5D5C8; text-align: right; color: #6AA84F;">${this.lucroUnidade.textContent}</td>
+                    </tr>
+                    <tr style="background: #FFF8F2;">
+                        <td style="padding: 12px; border: 1px solid #E5D5C8;"><strong>Margem Final</strong></td>
+                        <td style="padding: 12px; border: 1px solid #E5D5C8; text-align: right; color: #6AA84F;">${this.margemFinal.textContent}</td>
+                    </tr>
+                </table>
+                
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #E5D5C8; text-align: center; font-size: 0.85rem; color: #666;">
+                    <p style="margin: 5px 0;">Relatório gerado pela Calculadora de Preços de Ovos de Páscoa</p>
+                    <p style="margin: 5px 0;">Ferramenta desenvolvida para confeiteiras e pequenos empreendedores</p>
+                </div>
+            </div>
+        `;
+        
+        // Criar elemento temporário
+        const element = document.createElement('div');
+        element.innerHTML = pdfContent;
+        
+        // Configurações do PDF
+        const opt = {
+            margin: 10,
+            filename: `Relatorio-${nomeProduto.replace(/\s+/g, '-')}-${new Date().getTime()}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, logging: false },
+            jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+        };
+        
+        // Gerar PDF
+        html2pdf().set(opt).from(element).save();
+    }

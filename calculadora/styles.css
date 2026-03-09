@@ -324,6 +324,23 @@ small {
     box-shadow: var(--sombra-media);
 }
 
+.btn-pdf {
+    background: linear-gradient(135deg, var(--destaque-pascoa) 0%, #D89BA3 100%);
+    color: white;
+    flex: 1;
+    min-width: 200px;
+}
+
+.btn-pdf:hover {
+    background: linear-gradient(135deg, #D89BA3 0%, #C88A92 100%);
+    transform: translateY(-2px);
+    box-shadow: var(--sombra-media);
+}
+
+.btn-pdf:active {
+    transform: translateY(0);
+}
+
 @media (max-width: 768px) {
     .button-group {
         flex-direction: column;
@@ -347,6 +364,23 @@ small {
 .resultado-final h2 {
     color: var(--cor-principal);
     margin-bottom: var(--espacamento-lg);
+}
+
+.resultado-botoes {
+    display: flex;
+    gap: var(--espacamento-md);
+    margin-top: var(--espacamento-lg);
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .resultado-botoes {
+        flex-direction: column;
+    }
+
+    .resultado-botoes .btn {
+        min-width: 100%;
+    }
 }
 
 .resultado-grid {
@@ -549,4 +583,91 @@ small {
 
 .avancado-only.visible.resultado-item {
     display: block !important;
+}
+
+
+/* ============================================
+   ESTILOS PARA IMPRESSÃO/PDF
+   ============================================ */
+
+@media print {
+    body {
+        background: white;
+    }
+
+    .container {
+        max-width: 100%;
+        padding: 20px;
+    }
+
+    .header,
+    .footer,
+    .form-container,
+    .button-group,
+    .mode-toggle {
+        display: none !important;
+    }
+
+    .resultado-final {
+        margin-top: 0;
+        border: 2px solid var(--destaque-pascoa);
+        box-shadow: none;
+        page-break-inside: avoid;
+    }
+
+    .resultado-botoes {
+        display: none !important;
+    }
+
+    .resultado-grid {
+        page-break-inside: avoid;
+    }
+
+    .resultado-item {
+        page-break-inside: avoid;
+    }
+}
+
+/* Estilo para o container do PDF */
+#pdf-container {
+    background: white;
+    padding: 30px;
+    border-radius: 0;
+}
+
+#pdf-container h1 {
+    font-family: var(--fonte-titulo);
+    color: var(--cor-principal);
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+#pdf-container .pdf-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid var(--destaque-pascoa);
+}
+
+#pdf-container .pdf-header p {
+    color: var(--texto-secundario);
+    font-size: 0.95rem;
+    margin: 5px 0;
+}
+
+#pdf-container .pdf-dados-produto {
+    background: var(--fundo-suave);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+#pdf-container .pdf-dados-produto p {
+    margin: 8px 0;
+    font-size: 0.95rem;
+}
+
+#pdf-container .pdf-dados-produto strong {
+    color: var(--cor-principal);
 }
