@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Preços - Ovos de Páscoa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Biblioteca para gerar PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🍫 Calculadora de Preços - Ovos de Páscoa</h1>
+            <p>Calcule seu custo real e defina seu lucro com precisão profissional</p>
+            
+            <div class="mode-toggle">
+                <button type="button" class="mode-btn active" data-mode="simples">Modo Simples</button>
+                <button type="button" class="mode-btn" data-mode="avancado">Modo Avançado</button>
+            </div>
+        </header>
+
+        <form id="calculadoraForm">
+            <!-- BLOCO 1: DADOS DO PRODUTO -->
+            <section class="card">
+                <h2>📦 Dados do Produto</h2>
+                <div class="form-group">
+                    <label for="nomeProduto">Nome do Produto</label>
+                    <input type="text" id="nomeProduto" placeholder="Ex: Ovo de Brigadeiro Gourmet" value="Ovo de Páscoa Recheado">
+                    <small>Identifique seu produto para o relatório</small>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pesoCasca">Peso da Casca (g) *</label>
+                        <input type="number" id="pesoCasca" value="200" step="0.1" min="0">
+                        <small>Peso do chocolate da casca</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="pesoRecheio">Peso do Recheio (g) *</label>
+                        <input type="number" id="pesoRecheio" value="150" step="0.1" min="0">
+                        <small>Peso total do recheio</small>
+                    </div>
+                </div>
+                <div class="form-group avancado-only">
+                    <label for="pesoDecoracao">Peso da Decoração (g)</label>
+                    <input type="number" id="pesoDecoracao" value="0" step="0.1" min="0">
+                    <small>Confeitos, granulados, etc.</small>
+                </div>
+            </section>
+
+            <!-- BLOCO 2: INGREDIENTES -->
+            <section class="card">
+                <h2>🥣 Ingredientes</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="custoCasca">Custo Chocolate (por kg) *</label>
+                        <div class="input-wrapper">
+                            <span class="prefix">R$</span>
+                            <input type="number" id="custoCasca" value="35.00" step="0.01" min="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="custoRecheio">Custo Recheio (por kg) *</label>
+                        <div class="input-wrapper">
+                            <span class="prefix">R$</span>
+                            <input type="number" id="custoRecheio" value="25.00" step="0.01" min="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group avancado-only">
+                    <label for="custoDecoracao">Custo Decoração (por kg)</label>
+                    <div class="input-wrapper">
+                        <span class="prefix">R$</span>
+                        <input type="number" id="custoDecoracao" value="0" step="0.01" min="0">
+                    </div>
+                </div>
+            </section>
+
+            <!-- BLOCO 3: EMBALAGEM E EXTRAS -->
+            <section class="card">
+                <h2>🎀 Embalagem e Extras</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="custoEmbalagem">Custo Embalagem *</label>
+                        <div class="input-wrapper">
+                            <span class="prefix">R$</span>
+                            <input type="number" id="custoEmbalagem" value="3.50" step="0.01" min="0">
+                        </div>
+                        <small>Caixa, papel, etc.</small>
+                    </div>
+                    <div class="form-group avancado-only">
+                        <label for="custoColher">Custo da Colher</label>
+                        <div class="input-wrapper">
+                            <span class="prefix">R$</span>
+                            <input type="number" id="custoColher" value="0" step="0.01" min="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row avancado-only">
+                    <div class="form-group">
+                        <label for="custoFitaTag">Fita, Tag e Adesivo</label>
+                        <div class="input-wrapper">
+                            <span class="prefix">R$</span>
+                            <input type="number" id="custoFitaTag" value="0" step="0.01" min="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="outrosCustos">Outros Custos</label>
+                        <div class="input-wrapper">
+                            <span class="prefix">R$</span>
+                            <input type="number" id="outrosCustos" value="0" step="0.01" min="0">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BLOCO 4: CUSTOS E MÃO DE OBRA -->
+            <section class="card">
+                <h2>⏱️ Custos e Mão de Obra</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="tempoProducao">Tempo Produção (min) *</label>
+                        <input type="number" id="tempoProducao" value="30" step="1" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="valorHora">Valor da sua Hora *</label>
+                        <div class="input-wrapper">
+                            <span class="prefix">R$</span>
+                            <input type="number" id="valorHora" value="50.00" step="0.01" min="0">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row avancado-only">
+                    <div class="form-group">
+                        <label for="custoGasEnergia">Gás/Energia (unid)</label>
+                        <div class="input-wrapper">
+                            <span class="prefix">R$</span>
+                            <input type="number" id="custoGasEnergia" value="0" step="0.01" min="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="custoAguaLimpeza">Água/Limpeza (unid)</label>
+                        <div class="input-wrapper">
+                            <span class="prefix">R$</span>
+                            <input type="number" id="custoAguaLimpeza" value="0" step="0.01" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row avancado-only">
+                    <div class="form-group">
+                        <label for="custoFixoMensal">Custos Fixos Mensais</label>
+                        <div class="input-wrapper">
+                            <span class="prefix">R$</span>
+                            <input type="number" id="custoFixoMensal" value="0" step="0.01" min="0">
+                        </div>
+                        <small>Aluguel, internet, etc.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantidadeMedia">Qtd Média Produzida</label>
+                        <input type="number" id="quantidadeMedia" value="100" min="1">
+                        <small>Para rateio de custos</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="margemLucro">Margem de Lucro (%) *</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="margemLucro" value="40" step="0.1" min="0">
+                            <span class="suffix">%</span>
+                        </div>
+                    </div>
+                    <div class="form-group avancado-only">
+                        <label for="taxaMaquininha">Taxa Maquininha (%)</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="taxaMaquininha" value="0" step="0.01" min="0">
+                            <span class="suffix">%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row avancado-only">
+                    <div class="form-group">
+                        <label for="percentualPerdas">Perdas/Imprevistos (%)</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="percentualPerdas" value="0" step="0.1" min="0">
+                            <span class="suffix">%</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="taxaEntrega">Taxa de Entrega</label>
+                        <div class="input-wrapper">
+                            <span class="prefix">R$</span>
+                            <input type="number" id="taxaEntrega" value="0" step="0.01" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group avancado-only">
+                    <label for="descontoPromocional">Desconto Promocional (%)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="descontoPromocional" value="0" step="0.1" min="0">
+                        <span class="suffix">%</span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="actions">
+                <button type="button" id="btnCalcular" class="btn-main">Calcular Preço</button>
+                <button type="reset" class="btn-secondary">Limpar Campos</button>
+            </div>
+        </form>
+
+        <!-- BLOCO 5: RESULTADO FINAL -->
+        <section id="bloco-resultado" class="card result-card" style="display: none;">
+            <h2>✨ Resultado Final</h2>
+            <div class="result-grid">
+                <div class="result-item">
+                    <span>Custo Ingredientes</span>
+                    <strong id="resIngredientes">R$ 0,00</strong>
+                </div>
+                <div class="result-item">
+                    <span>Custo Embalagem</span>
+                    <strong id="resEmbalagem">R$ 0,00</strong>
+                </div>
+                <div class="result-item">
+                    <span>Custo Mão de Obra</span>
+                    <strong id="resMaoObra">R$ 0,00</strong>
+                </div>
+                <div class="result-item avancado-only">
+                    <span>Custo Fixo Rateado</span>
+                    <strong id="resFixo">R$ 0,00</strong>
+                </div>
+                <div class="result-item highlight">
+                    <span>Custo Real Total</span>
+                    <strong id="resCustoTotal">R$ 0,00</strong>
+                </div>
+                <div class="result-item">
+                    <span>Preço Mínimo</span>
+                    <strong id="resPrecoMinimo">R$ 0,00</strong>
+                </div>
+                <div class="result-item highlight success">
+                    <span>Preço Sugerido</span>
+                    <strong id="resPrecoSugerido">R$ 0,00</strong>
+                </div>
+                <div class="result-item success">
+                    <span>Lucro por Unidade</span>
+                    <strong id="resLucro">R$ 0,00</strong>
+                </div>
+                <div class="result-item success">
+                    <span>Margem Final</span>
+                    <strong id="resMargem">0,00%</strong>
+                </div>
+            </div>
+            
+            <div id="avisos" class="avisos"></div>
+
+            <div class="result-actions">
+                <button type="button" id="btnBaixarPDF" class="btn-pdf">📥 Baixar Relatório PDF</button>
+                <button type="button" id="btnSimularOutro" class="btn-secondary">Simular Outro Preço</button>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>Calculadora desenvolvida para confeiteiras e pequenos empreendedores</p>
+            <p><small>Todos os valores em reais (R$) | Arredondamento comercial automático</small></p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
